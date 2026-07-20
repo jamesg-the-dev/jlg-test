@@ -8,6 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.10" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+  </ItemGroup>
+
+  <!-- TodoApi.Tests lives in a subfolder of this project for monorepo convenience; exclude it explicitly so
+       the default recursive glob doesn't pull its generated/compiled files into this project's compilation. -->
+  <ItemGroup>
+    <Compile Remove="TodoApi.Tests/**/*.cs" />
+    <Content Remove="TodoApi.Tests/**/*" />
+    <None Remove="TodoApi.Tests/**/*" />
+    <EmbeddedResource Remove="TodoApi.Tests/**/*" />
   </ItemGroup>
 
 </Project>
