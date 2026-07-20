@@ -50,6 +50,24 @@ public class TodoService(TodoDbContext dbContext) : ITodoService
         return ToResponse(entity);
     }
 
+    public async Task<TodoResponse?> SetCompletedAsync(
+        int id,
+        bool isCompleted,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var entity = await _dbContext.TodoItems.FindAsync([id], cancellationToken);
+        if (entity is null)
+        {
+            return null;
+        }
+
+        entity.IsCompleted = isCompleted;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return ToResponse(entity);
+    }
+
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         var entity = await _dbContext.TodoItems.FindAsync([id], cancellationToken);

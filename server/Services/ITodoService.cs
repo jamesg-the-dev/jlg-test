@@ -11,5 +11,11 @@ public interface ITodoService
         CancellationToken cancellationToken = default
     );
 
+    Task<TodoResponse?> SetCompletedAsync(
+        int id,
+        bool isCompleted,
+        CancellationToken cancellationToken = default
+    );
+
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
 }
