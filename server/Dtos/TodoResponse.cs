@@ -7,7 +7,7 @@ public record TodoResponse(
     string Title,
     bool IsCompleted,
     DateOnly? DueDate,
-    TodoPriority Priority,
+    TodoPriority? Priority,
     string? Category,
     DateTime CreatedAtUtc
 );

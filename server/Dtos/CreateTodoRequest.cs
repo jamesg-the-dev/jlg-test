@@ -11,7 +11,7 @@ public class CreateTodoRequest
 
     public DateOnly? DueDate { get; set; }
 
-    public TodoPriority Priority { get; set; } = TodoPriority.Medium;
+    public TodoPriority? Priority { get; set; } = null!;
 
     [MaxLength(TodoItem.CategoryMaxLength)]
     public string? Category { get; set; }

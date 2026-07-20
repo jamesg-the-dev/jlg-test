@@ -9,7 +9,7 @@ public class TodoItem
     public string Title { get; set; } = string.Empty;
     public bool IsCompleted { get; set; }
     public DateOnly? DueDate { get; set; }
-    public TodoPriority Priority { get; set; } = TodoPriority.Medium;
+    public TodoPriority? Priority { get; set; }
     public string? Category { get; set; }
     public DateTime CreatedAtUtc { get; set; }
 }
