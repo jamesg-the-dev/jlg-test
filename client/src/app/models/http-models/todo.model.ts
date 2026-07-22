@@ -16,3 +16,8 @@ export type CreateTodoRequest = {
   priority?: TodoPriority | null;
   category?: string | null;
 };
+
+export interface TodoCountsResponse {
+  totalCount: number;
+  completedCount: number;
+}

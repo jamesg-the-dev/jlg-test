@@ -24,7 +24,7 @@ export const DEFAULT_CATEGORY_COLOR = '#8BA5C4';
 export const CATEGORIES: Category[] = ['Personal', 'Work', 'Health', 'Finance', 'Learning'];
 
 export const VIEW_LABELS: Record<NavView, string> = {
-  projects: 'All Tasks',
+  all: 'All Tasks',
   completed: 'Completed',
 };
 

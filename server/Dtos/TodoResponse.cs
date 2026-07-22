@@ -11,3 +11,5 @@ public record TodoResponse(
     string? Category,
     DateTime CreatedAtUtc
 );
+
+public record TodoCountsResponse(int TotalCount, int CompletedCount);

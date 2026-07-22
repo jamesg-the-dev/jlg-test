@@ -84,4 +84,36 @@ public class TodoController(ITodoService todoService) : ControllerBase
         var deleted = await _todoService.DeleteAsync(id, cancellationToken);
         return deleted ? NoContent() : NotFound();
     }
+
+    /// <summary>
+    /// Gets all completed TODO items.
+    /// </summary>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("completed")]
+    public async Task<ActionResult<PagedResult<TodoResponse>>> GetCompleted(
+        int page = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var todos = await _todoService.GetCompletedAsync(page, pageSize, cancellationToken);
+        return Ok(todos);
+    }
+
+    /// <summary>
+    /// Gets the counts of total and completed TODO items.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("counts")]
+    public async Task<ActionResult<TodoCountsResponse>> GetCounts(
+        CancellationToken cancellationToken = default
+    )
+    {
+        var counts = await _todoService.GetCountsAsync(cancellationToken);
+        return Ok(counts);
+    }
 }

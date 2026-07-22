@@ -10,6 +10,12 @@ public interface ITodoService
         CancellationToken cancellationToken = default
     );
 
+    Task<PagedResult<TodoResponse>> GetCompletedAsync(
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default
+    );
+
     Task<TodoResponse> CreateAsync(
         CreateTodoRequest request,
         CancellationToken cancellationToken = default
@@ -22,4 +28,6 @@ public interface ITodoService
     );
 
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
+
+    Task<TodoCountsResponse> GetCountsAsync(CancellationToken cancellationToken = default);
 }

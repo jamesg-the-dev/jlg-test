@@ -118,4 +118,47 @@ public class TodoService(TodoDbContext dbContext) : ITodoService
             entity.Category,
             entity.CreatedAtUtc
         );
+
+    public async Task<PagedResult<TodoResponse>> GetCompletedAsync(
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = _dbContext
+            .TodoItems.Where(t => t.IsCompleted)
+            .AsNoTracking()
+            .OrderBy(t => t.Id);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(t => new TodoResponse(
+                t.Id,
+                t.Title,
+                t.IsCompleted,
+                t.DueDate,
+                t.Priority,
+                t.Category,
+                t.CreatedAtUtc
+            ))
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<TodoResponse>(items, totalCount, page, pageSize);
+    }
+
+    public async Task<TodoCountsResponse> GetCountsAsync(
+        CancellationToken cancellationToken = default
+    )
+    {
+        var counts =
+            await _dbContext
+                .TodoItems.GroupBy(_ => 1)
+                .Select(g => new TodoCountsResponse(g.Count(), g.Count(t => t.IsCompleted)))
+                .FirstOrDefaultAsync(cancellationToken) ?? new TodoCountsResponse(0, 0);
+
+        return counts;
+    }
 }

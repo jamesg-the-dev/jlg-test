@@ -4,7 +4,7 @@ export type Priority = Lowercase<TodoPriority>;
 
 export type Category = 'Personal' | 'Work' | 'Health' | 'Finance' | 'Learning';
 
-export type NavView = 'projects' | 'completed';
+export type NavView = 'all' | 'completed';
 
 export interface Task {
   id: number;

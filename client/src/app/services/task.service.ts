@@ -6,7 +6,11 @@ import type { PagedResult } from '../models/http-models/paged-result';
 
 import { environment } from '../../environments/environment';
 import { Task, TaskFormData } from '../models/task.model';
-import { TodoResponse, CreateTodoRequest } from '../models/http-models/todo.model';
+import {
+  TodoResponse,
+  CreateTodoRequest,
+  TodoCountsResponse,
+} from '../models/http-models/todo.model';
 import { mapTodoResponseToTask, priorityToServer } from '../utilities/task.util';
 
 @Injectable({ providedIn: 'root' })
@@ -23,6 +27,23 @@ export class TaskService {
         };
       }),
     );
+  }
+
+  getCompleted(): Observable<PagedResult<Task>> {
+    const url = `${this.base}/completed`;
+    return this.http.get<PagedResult<TodoResponse>>(url).pipe(
+      map((result) => {
+        return {
+          ...result,
+          items: result.items.map(mapTodoResponseToTask),
+        };
+      }),
+    );
+  }
+
+  getCounts(): Observable<TodoCountsResponse> {
+    const url = `${this.base}/counts`;
+    return this.http.get<TodoCountsResponse>(url);
   }
 
   create(data: TaskFormData): Observable<Task> {

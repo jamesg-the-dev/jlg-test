@@ -26,7 +26,7 @@ export class SidebarComponent {
   protected readonly email = USER.email;
 
   protected readonly navItems: NavItem[] = [
-    { id: 'projects', label: 'All Tasks', icon: 'folder_open', shortLabel: 'Tasks' },
+    { id: 'all', label: 'All Tasks', icon: 'folder_open', shortLabel: 'Tasks' },
     { id: 'completed', label: 'Completed', icon: 'done_all', shortLabel: 'Done' },
   ];
 }

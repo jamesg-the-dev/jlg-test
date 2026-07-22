@@ -36,6 +36,7 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.loadingBarService.show();
+    this.taskStore.loadCounts().subscribe();
     this.taskStore.loadTasks().subscribe({
       next: () => {
         this.loadingBarService.hide();

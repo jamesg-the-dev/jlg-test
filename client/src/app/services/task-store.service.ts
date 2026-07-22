@@ -1,7 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { NavView, Task, TaskFormData, TaskSection } from '../models/task.model';
 import { VIEW_LABELS } from '../constants/global.constant';
-import { EMPTY_MESSAGES } from '../constants/messages.constant';
 import { Dialog } from '@angular/cdk/dialog';
 import {
   TaskFormDialogComponent,
@@ -17,6 +16,7 @@ import {
 import { GlobalPositionStrategy } from '@angular/cdk/overlay';
 import { NotificationService } from './notification.service';
 import { PagedData } from '../models/http-models/paged-result';
+import { TodoCountsResponse } from '../models/http-models/todo.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskStore {
@@ -26,11 +26,10 @@ export class TaskStore {
   readonly tasks = signal<Task[]>([]);
   private readonly taskService = inject(TaskService);
 
-  readonly view = signal<NavView>('projects');
+  readonly view = signal<NavView>('all');
   private readonly selectedTaskId = signal<number | null>(null);
 
   readonly viewLabel = computed(() => VIEW_LABELS[this.view()]);
-  readonly emptyMessage = computed(() => EMPTY_MESSAGES[this.view()]);
 
   private readonly completedTasks = computed(() => this.tasks().filter((task) => task.done));
 
@@ -38,7 +37,7 @@ export class TaskStore {
 
   readonly visibleTasks = computed(() => {
     switch (this.view()) {
-      case 'projects':
+      case 'all':
         return this.tasks().filter((task) => !task.done);
       case 'completed':
         return this.completedTasks();
@@ -47,10 +46,10 @@ export class TaskStore {
     }
   });
 
-  readonly taskCounts = computed<Record<NavView, number>>(() => ({
-    projects: this.tasks().filter((task) => !task.done).length,
-    completed: this.completedTasks().length,
-  }));
+  readonly taskCounts = signal<Record<NavView, number>>({
+    all: 0,
+    completed: 0,
+  });
 
   readonly groupedTasks = computed<TaskSection[]>(() => {
     return [{ label: this.viewLabel(), items: this.visibleTasks() }];
@@ -66,6 +65,17 @@ export class TaskStore {
       tap((response) => {
         this.paginationData.set(new PagedData(response));
         this.tasks.set(response.items);
+      }),
+    );
+  }
+
+  loadCounts() {
+    return this.taskService.getCounts().pipe(
+      tap((counts) => {
+        this.taskCounts.set({
+          all: counts.totalCount,
+          completed: counts.completedCount,
+        });
       }),
     );
   }

@@ -31,7 +31,7 @@ export class BottomTabBarComponent {
   readonly viewChange = output<NavView>();
 
   protected readonly tabs: Array<{ id: NavView; label: string }> = [
-    { id: 'projects', label: 'Projects' },
-    { id: 'completed', label: 'Done' },
+    { id: 'all', label: 'All Tasks' },
+    { id: 'completed', label: 'Completed' },
   ];
 }
