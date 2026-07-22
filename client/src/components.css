@@ -1,0 +1,17 @@
+.priority-pill {
+  padding: 0.5rem 0;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  display: block;
+  transition: all 150ms;
+  color: var(--muted-foreground);
+  background: var(--muted);
+}
+
+.priority-pill.selected {
+  color: var(--priority-color);
+  background: var(--priority-bg);
+  box-shadow: 0 0 0 2px var(--priority-color);
+}

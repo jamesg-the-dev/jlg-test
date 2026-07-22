@@ -58,10 +58,8 @@ export class TaskFormDialogComponent {
 
   protected async onSubmit() {
     const taskForm = this.taskForm();
-    // console.log('asds', taskForm.value());
-    // return;
-
     if (!taskForm.valid()) {
+      //todo handle validation
       return;
     }
 
