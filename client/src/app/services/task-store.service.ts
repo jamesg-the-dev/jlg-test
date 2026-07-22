@@ -15,10 +15,12 @@ import {
   TaskDetailDialogData,
 } from '../components/task-detail-dialog/task-detail-dialog.component';
 import { GlobalPositionStrategy } from '@angular/cdk/overlay';
+import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaskStore {
   private readonly dialog = inject(Dialog);
+  private readonly notificationService = inject(NotificationService);
 
   readonly tasks = signal<Task[]>([]);
   private readonly taskService = inject(TaskService);
@@ -72,8 +74,20 @@ export class TaskStore {
     if (!task) return;
 
     const newDone = !task.done;
-    this.taskService.setCompleted(taskId, newDone).subscribe((updated) => {
-      this.tasks.update((tasks) => tasks.map((t) => (t.id === taskId ? updated : t)));
+    this.taskService.setCompleted(taskId, newDone).subscribe({
+      next: (updated) => {
+        this.tasks.update((tasks) => tasks.map((t) => (t.id === taskId ? updated : t)));
+        this.notificationService.success(
+          'Task updated',
+          `Task "${updated.title}" marked as ${updated.done ? 'completed' : 'incomplete'}.`,
+        );
+      },
+      error: () => {
+        this.notificationService.error(
+          'Error updating task',
+          `Failed to update task "${task.title}". Please try again.`,
+        );
+      },
     });
   }
 

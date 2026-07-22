@@ -8,6 +8,7 @@ import { CATEGORIES, PRIORITY_CONFIG } from '../../constants/global.constant';
 import { TaskStore } from '../../services/task-store.service';
 import { firstValueFrom } from 'rxjs';
 import { TooltipDirective } from '../../directives/tooltip.directive';
+import { NotificationService } from '../../services/notification.service';
 
 export interface TaskFormDialogData {
   taskData: TaskFormData | null;
@@ -27,6 +28,7 @@ export class TaskFormDialogComponent {
   readonly dialogRef = inject(DialogRef<TaskFormDialogResult>);
   readonly dialogData = inject(DIALOG_DATA) as TaskFormDialogData;
   readonly taskStore = inject(TaskStore);
+  readonly notificationService = inject(NotificationService);
 
   protected readonly categories = CATEGORIES;
   protected readonly priorities: Priority[] = ['low', 'medium', 'high'];
@@ -63,8 +65,13 @@ export class TaskFormDialogComponent {
       return;
     }
 
-    await firstValueFrom(this.taskStore.saveTask(taskForm.value())).then((createdTask) => {
-      this.dialogRef.close({ taskData: createdTask });
-    });
+    await firstValueFrom(this.taskStore.saveTask(taskForm.value()))
+      .then((createdTask) => {
+        this.dialogRef.close({ taskData: createdTask });
+      })
+      .catch(() => {
+        let message = 'Failed to save task. Please try again.';
+        this.notificationService.error('Failed', message);
+      });
   }
 }

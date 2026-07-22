@@ -4,12 +4,12 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-task-empty-state',
   template: `<div class="flex flex-col items-center justify-center py-20 px-6 text-center">
-    <svg width="120" height="100" viewBox="0 0 120 100" fill="none" class="opacity-60">
+    <svg width="120" height="100" viewBox="0 0 120 100" fill="none" class="opacity-70">
       <rect x="20" y="20" width="80" height="60" rx="12" fill="var(--muted)" />
       <rect x="32" y="36" width="24" height="4" rx="2" fill="var(--switch-background)" />
       <rect x="32" y="46" width="40" height="4" rx="2" fill="var(--switch-background)" />
       <rect x="32" y="56" width="32" height="4" rx="2" fill="var(--switch-background)" />
-      <circle cx="20" cy="20" r="10" fill="var(--accent)" opacity="0.5" />
+      <circle cx="20" cy="20" r="10" fill="var(--accent)" />
       <path
         d="M15 20l3.5 3.5L25 15"
         stroke="white"
