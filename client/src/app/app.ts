@@ -38,4 +38,12 @@ export class App implements OnInit {
   ngOnInit(): void {
     this.taskStore.loadTasks();
   }
+
+  deleteTask(taskId: number) {
+    this.taskStore.deleteTask(taskId).subscribe({
+      error: () => {
+        //todo handle error
+      },
+    });
+  }
 }

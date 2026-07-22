@@ -1,9 +1,8 @@
 import { Component, computed, input, output } from '@angular/core';
 
 import { Task } from '../../models/task.model';
-import { formatDate, getPriorityConfigObj } from '../../utilities/task.util';
+import { formatDate, getCategoryColor, getPriorityConfigObj } from '../../utilities/task.util';
 import { CheckTaskButtonComponent } from '../check-task-button/check-task-button.component';
-import { CATEGORY_COLORS, DEFAULT_CATEGORY_COLOR } from '../../constants/global.constant';
 
 @Component({
   selector: 'app-task-card',
@@ -21,9 +20,7 @@ export class TaskCardComponent {
   readonly deleted = output<number>();
 
   protected readonly priority = computed(() => getPriorityConfigObj(this.task().priority!));
-  protected readonly categoryColor = computed(
-    () => CATEGORY_COLORS[this.task().category!] ?? DEFAULT_CATEGORY_COLOR,
-  );
+  protected readonly categoryColor = computed(() => getCategoryColor(this.task().category));
   protected readonly formattedDueDate = computed(() => formatDate(this.task().dueDate ?? ''));
 
   protected onCompleted(): void {
@@ -33,5 +30,12 @@ export class TaskCardComponent {
   protected onDelete(event: Event): void {
     event.stopPropagation();
     this.deleted.emit(this.task().id);
+  }
+
+  protected selectTaskWithKeyboard(event: Event): void {
+    if (event.target === event.currentTarget) {
+      event.preventDefault();
+      this.selected.emit(this.task());
+    }
   }
 }

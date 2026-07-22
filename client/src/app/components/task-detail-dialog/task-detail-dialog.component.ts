@@ -2,12 +2,9 @@ import { Component, computed, inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 
 import { Task } from '../../models/task.model';
-import { formatDate, getPriorityConfigObj } from '../../utilities/task.util';
+import { formatDate, getCategoryColor, getPriorityConfigObj } from '../../utilities/task.util';
 import { CheckTaskButtonComponent } from '../check-task-button/check-task-button.component';
-import {
-  CATEGORY_COLORS,
-  PriorityConfigObj,
-} from '../../constants/global.constant';
+import { PriorityConfigObj } from '../../constants/global.constant';
 
 export interface TaskDetailDialogData {
   task: Task | null;
@@ -35,9 +32,9 @@ export class TaskDetailDialogComponent {
     return task?.priority ? getPriorityConfigObj(task.priority) : undefined;
   });
 
-  protected readonly categoryColor = computed<string | undefined>(() => {
+  protected readonly categoryColor = computed<string>(() => {
     const task = this.task();
-    return task?.category ? CATEGORY_COLORS[task.category] : undefined;
+    return task ? getCategoryColor(task.category) : '';
   });
 
   protected readonly dueDate = computed(() => {

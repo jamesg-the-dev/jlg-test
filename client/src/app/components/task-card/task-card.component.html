@@ -5,8 +5,8 @@
   tabindex="0"
   [attr.aria-label]="'View task: ' + task().title"
   (click)="selected.emit(task())"
-  (keydown.enter)="selected.emit(task())"
-  (keydown.space)="$event.preventDefault(); selected.emit(task())"
+  (keydown.enter)="selectTaskWithKeyboard($event)"
+  (keydown.space)="selectTaskWithKeyboard($event)"
 >
   <app-check-task-button [done]="task().done" (completed)="onCompleted()" />
 

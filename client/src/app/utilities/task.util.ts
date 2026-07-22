@@ -1,7 +1,12 @@
 import { Task } from '../models/task.model';
 import { CreateTodoRequest, TodoResponse } from '../models/http-models/todo.model';
 import { upperFirst } from './string.util';
-import { PRIORITY_CONFIG, PriorityConfigObj } from '../constants/global.constant';
+import {
+  CATEGORY_COLORS,
+  DEFAULT_CATEGORY_COLOR,
+  PRIORITY_CONFIG,
+  PriorityConfigObj,
+} from '../constants/global.constant';
 
 export const formatDate = (dateString: string): string => {
   if (!dateString) {
@@ -34,6 +39,9 @@ export const mapTodoResponseToTask = (todo: TodoResponse): Task => ({
 });
 
 export const getPriorityConfigObj = (priority: Task['priority']): PriorityConfigObj | undefined => {
-  if (!priority) return undefined;
-  return PRIORITY_CONFIG[priority];
+  return priority ? PRIORITY_CONFIG[priority] : undefined;
+};
+
+export const getCategoryColor = (category: Task['category']): string => {
+  return CATEGORY_COLORS[category] ?? DEFAULT_CATEGORY_COLOR;
 };
