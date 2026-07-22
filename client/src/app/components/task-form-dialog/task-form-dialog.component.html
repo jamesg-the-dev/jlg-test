@@ -1,8 +1,6 @@
 <section class="flex flex-col max-h-[85vh]">
   <div class="shrink-0 flex items-start justify-between gap-4 p-4 pb-0">
-    <h2 class="text-lg font-bold text-foreground">
-      {{ dialogData.isEditing ? 'Edit Task' : 'New Task' }}
-    </h2>
+    <h2 class="text-lg font-bold text-foreground">New Task</h2>
 
     <button
       type="button"
@@ -101,7 +99,7 @@
     <div class="shrink-0 flex gap-3 pt-1">
       <button
         type="button"
-        class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all bg-muted text-muted-foreground"
+        class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all bg-muted text-muted-foreground active:scale-[0.98]"
         (click)="dialogRef.close()"
       >
         Cancel
@@ -111,7 +109,7 @@
         class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-[0.98] bg-accent text-white"
         [disabled]="!taskForm.title().value().trim()"
       >
-        {{ dialogData.isEditing ? 'Save Changes' : 'Save Task' }}
+        Save Task
       </button>
     </div>
   </form>

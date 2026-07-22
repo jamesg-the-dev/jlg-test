@@ -1,0 +1,39 @@
+.loading-bar-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 9999;
+  background-color: var(--muted);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loading-bar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 50%,
+    transparent 100%
+  );
+  animation: loading-bar-sweep 1.7s ease-in-out infinite;
+
+  @media(max-width: 768px) {
+    animation-duration: 1.3s;
+  }
+}
+
+@keyframes loading-bar-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}

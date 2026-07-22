@@ -1,34 +1,30 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Dialog } from '@angular/cdk/dialog';
-
 import { Task } from './models/task.model';
 import { TaskStore } from './services/task-store.service';
+import { LoadingBarService } from './services/loading-bar.service';
 import { BottomTabBarComponent } from './components/bottom-tab-bar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { TaskCardComponent } from './components/task-card/task-card.component';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/internal/operators/map';
 import { USER } from './constants/global.constant';
-import { TaskEmptyStateComponent } from "./components/task-empty-state/task-empty-state.component";
+import { TaskEmptyStateComponent } from './components/task-empty-state/task-empty-state.component';
+import { LoadingBarComponent } from './components/loading-bar/loading-bar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BottomTabBarComponent, SidebarComponent, TaskCardComponent, TaskEmptyStateComponent],
+  imports: [
+    BottomTabBarComponent,
+    SidebarComponent,
+    TaskCardComponent,
+    TaskEmptyStateComponent,
+    LoadingBarComponent,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  private readonly dialog = inject(Dialog);
-  private breakpointObserver = inject(BreakpointObserver);
-
   protected readonly taskStore = inject(TaskStore);
-
-  readonly isMobile = toSignal(
-    this.breakpointObserver.observe(Breakpoints.Handset).pipe(map((r) => r.matches)),
-    { initialValue: false },
-  );
+  private readonly loadingBarService = inject(LoadingBarService);
 
   readonly firstName = USER.firstName;
 
@@ -37,7 +33,16 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
-    this.taskStore.loadTasks();
+    this.loadingBarService.show();
+    this.taskStore.loadTasks().subscribe({
+      next: () => {
+        this.loadingBarService.hide();
+      },
+      error: () => {
+        this.loadingBarService.hide();
+        //todo handle error
+      },
+    });
   }
 
   deleteTask(taskId: number) {

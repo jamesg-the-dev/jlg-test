@@ -7,11 +7,10 @@ import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { CATEGORIES, PRIORITY_CONFIG } from '../../constants/global.constant';
 import { TaskStore } from '../../services/task-store.service';
 import { firstValueFrom } from 'rxjs';
-import { TooltipDirective } from "../../directives/tooltip.directive";
+import { TooltipDirective } from '../../directives/tooltip.directive';
 
 export interface TaskFormDialogData {
   taskData: TaskFormData | null;
-  isEditing: boolean;
 }
 
 export interface TaskFormDialogResult {

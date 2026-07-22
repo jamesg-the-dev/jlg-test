@@ -9,7 +9,7 @@ import {
   TaskFormDialogResult,
 } from '../components/task-form-dialog/task-form-dialog.component';
 import { TaskService } from './task.service';
-import { Observable, tap } from 'rxjs';
+import { delay, Observable, tap } from 'rxjs';
 import {
   TaskDetailDialogComponent,
   TaskDetailDialogData,
@@ -56,7 +56,10 @@ export class TaskStore {
   );
 
   loadTasks() {
-    this.taskService.getAll().subscribe((ts) => this.tasks.set(ts));
+    return this.taskService.getAll().pipe(
+      delay(1000), //add artificial delay to simulate loading state
+      tap((ts) => this.tasks.set(ts)),
+    );
   }
 
   setView(view: NavView): void {
@@ -84,7 +87,6 @@ export class TaskStore {
       {
         data: {
           taskData: null,
-          isEditing: false,
         },
         maxWidth: '28rem',
         maxHeight: '90vh',
