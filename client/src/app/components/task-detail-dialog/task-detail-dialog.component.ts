@@ -5,6 +5,7 @@ import { Task } from '../../models/task.model';
 import { formatDate, getCategoryColor, getPriorityConfigObj } from '../../utilities/task.util';
 import { CheckTaskButtonComponent } from '../check-task-button/check-task-button.component';
 import { PriorityConfigObj } from '../../constants/global.constant';
+import { TooltipDirective } from '../../directives/tooltip.directive';
 
 export interface TaskDetailDialogData {
   task: Task | null;
@@ -15,7 +16,7 @@ export interface TaskDetailDialogData {
 @Component({
   selector: 'app-task-detail-dialog',
   standalone: true,
-  imports: [CheckTaskButtonComponent],
+  imports: [CheckTaskButtonComponent, TooltipDirective],
   templateUrl: './task-detail-dialog.component.html',
   host: {
     class: 'flex flex-col gap-3 p-6 h-full',

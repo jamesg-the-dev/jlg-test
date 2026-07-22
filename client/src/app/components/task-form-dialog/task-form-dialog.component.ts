@@ -7,6 +7,7 @@ import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { CATEGORIES, PRIORITY_CONFIG } from '../../constants/global.constant';
 import { TaskStore } from '../../services/task-store.service';
 import { firstValueFrom } from 'rxjs';
+import { TooltipDirective } from "../../directives/tooltip.directive";
 
 export interface TaskFormDialogData {
   taskData: TaskFormData | null;
@@ -20,7 +21,7 @@ export interface TaskFormDialogResult {
 @Component({
   selector: 'app-task-form-dialog',
   standalone: true,
-  imports: [FormField, FormRoot, A11yModule],
+  imports: [FormField, FormRoot, A11yModule, TooltipDirective],
   templateUrl: './task-form-dialog.component.html',
 })
 export class TaskFormDialogComponent {
