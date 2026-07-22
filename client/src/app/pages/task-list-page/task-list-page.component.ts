@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NavView, Task } from '../../models/task.model';
 import { TaskStore } from '../../services/task-store.service';
 import { LoadingBarService } from '../../services/loading-bar.service';
+import { NotificationService } from '../../services/notification.service';
 import { TaskEmptyStateComponent } from '../../components/task-empty-state/task-empty-state.component';
 import { USER } from '../../constants/global.constant';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
@@ -20,6 +21,7 @@ import { TaskListComponent } from '../../components/task-list/task-list.componen
 export class TaskListPageComponent implements OnInit {
   protected readonly taskStore = inject(TaskStore);
   private readonly loadingBarService = inject(LoadingBarService);
+  private readonly notificationService = inject(NotificationService);
   private readonly route = inject(ActivatedRoute);
 
   protected readonly firstName = USER.firstName;
@@ -47,7 +49,10 @@ export class TaskListPageComponent implements OnInit {
     this.taskStore.loadTasks(view).subscribe({
       next: () => {},
       error: () => {
-        //todo handle error
+        this.notificationService.error(
+          'Error loading tasks',
+          'Failed to load tasks. Please try again.',
+        );
       },
     });
   }
@@ -59,7 +64,10 @@ export class TaskListPageComponent implements OnInit {
   protected deleteTask(taskId: number): void {
     this.taskStore.deleteTask(taskId).subscribe({
       error: () => {
-        //todo handle error
+        this.notificationService.error(
+          'Error deleting task',
+          'Failed to delete task. Please try again.',
+        );
       },
     });
   }
@@ -74,7 +82,10 @@ export class TaskListPageComponent implements OnInit {
 
     this.taskStore.loadMore().subscribe({
       error: () => {
-        //todo handle error
+        this.notificationService.error(
+          'Error loading tasks',
+          'Failed to load more tasks. Please try again.',
+        );
       },
     });
   }
