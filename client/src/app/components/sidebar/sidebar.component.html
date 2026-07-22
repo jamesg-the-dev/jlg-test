@@ -19,7 +19,7 @@
     <button
       type="button"
       class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm bg-accent text-white font-semibold transition-all duration-150 active:scale-[0.98]"
-      (click)="newTask.emit()"
+      (click)="openNewTask()"
     >
       <span class="material-symbol symbol-filled text-lg">add</span>
       New Task
@@ -28,11 +28,15 @@
 
   <nav class="flex-1 px-3 space-y-1" aria-label="Task views">
     @for (item of navItems; track item.id) {
-      <button
-        type="button"
-        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150"
-        [class]="view() === item.id ? 'bg-accent text-white' : 'hover:bg-white/45'"
-        (click)="viewChange.emit(item.id)"
+      <a
+        #rla="routerLinkActive"
+        routerLinkActive
+        [routerLink]="['/', item.id]"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [class]="
+          'w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ' +
+          (rla.isActive ? 'bg-accent text-white' : 'hover:bg-white/45')
+        "
       >
         <span class="flex items-center gap-3 min-w-0">
           <span class="text-xl flex items-center">
@@ -45,12 +49,12 @@
         @if (taskCounts()[item.id] > 0) {
           <span
             class="text-xs px-2 py-0.5 rounded-full font-semibold"
-            [class]="view() === item.id ? 'bg-white/16 text-white' : 'bg-muted'"
+            [class]="rla.isActive ? 'bg-white/16 text-white' : 'bg-muted'"
           >
             {{ taskCounts()[item.id] }}
           </span>
         }
-      </button>
+      </a>
     }
   </nav>
 

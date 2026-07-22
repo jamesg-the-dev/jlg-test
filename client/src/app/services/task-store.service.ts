@@ -16,9 +16,8 @@ import {
 import { GlobalPositionStrategy } from '@angular/cdk/overlay';
 import { NotificationService } from './notification.service';
 import { PagedData } from '../models/http-models/paged-result';
-import { TodoCountsResponse } from '../models/http-models/todo.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class TaskStore {
   private readonly dialog = inject(Dialog);
   private readonly notificationService = inject(NotificationService);
@@ -31,36 +30,22 @@ export class TaskStore {
 
   readonly viewLabel = computed(() => VIEW_LABELS[this.view()]);
 
-  private readonly completedTasks = computed(() => this.tasks().filter((task) => task.done));
-
   readonly paginationData = signal<PagedData<Task>>(PagedData.empty<Task>());
-
-  readonly visibleTasks = computed(() => {
-    switch (this.view()) {
-      case 'all':
-        return this.tasks().filter((task) => !task.done);
-      case 'completed':
-        return this.completedTasks();
-      default:
-        return [];
-    }
-  });
 
   readonly taskCounts = signal<Record<NavView, number>>({
     all: 0,
     completed: 0,
   });
 
-  readonly groupedTasks = computed<TaskSection[]>(() => {
-    return [{ label: this.viewLabel(), items: this.visibleTasks() }];
-  });
-
   readonly selectedTask = computed(
     () => this.tasks().find((task) => task.id === this.selectedTaskId()) ?? null,
   );
 
-  loadTasks() {
-    return this.taskService.getAll().pipe(
+  loadTasks(view: NavView) {
+    const request$ =
+      view === 'completed' ? this.taskService.getCompleted() : this.taskService.getAll();
+
+    return request$.pipe(
       delay(1000), //add artificial delay to simulate loading state
       tap((response) => {
         this.paginationData.set(new PagedData(response));
@@ -109,21 +94,6 @@ export class TaskStore {
 
   selectTask(taskId: number): void {
     this.selectedTaskId.update((selectedId) => (selectedId === taskId ? null : taskId));
-  }
-
-  openNewTask(): void {
-    const ref = this.dialog.open<TaskFormDialogResult, TaskFormDialogData>(
-      TaskFormDialogComponent,
-      {
-        data: {
-          taskData: null,
-        },
-        maxWidth: '28rem',
-        maxHeight: '90vh',
-        panelClass: ['bg-white', 'rounded-lg'],
-      },
-    );
-    ref.closed.subscribe(() => this.selectedTaskId.set(null));
   }
 
   openTaskDetailDialog(task: Task): void {

@@ -1,0 +1,12 @@
+<ul class="space-y-2">
+  @for (task of tasks(); track task.id) {
+    <li>
+      <app-task-card
+        [task]="task"
+        (completed)="completed.emit($event)"
+        (selected)="selected.emit($event)"
+        (deleted)="deleted.emit($event)"
+      />
+    </li>
+  }
+</ul>

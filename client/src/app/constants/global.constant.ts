@@ -33,3 +33,8 @@ export const USER = {
   lastName: 'Doe',
   email: 'john.doe@example.com',
 };
+
+export const ROUTE_NAMES: Record<'All' | 'Completed', NavView> = {
+  All: 'all',
+  Completed: 'completed',
+};
