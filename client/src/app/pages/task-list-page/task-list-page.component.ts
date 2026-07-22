@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavView, Task } from '../../models/task.model';
 import { TaskStore } from '../../services/task-store.service';
@@ -24,17 +24,29 @@ export class TaskListPageComponent implements OnInit {
 
   protected readonly firstName = USER.firstName;
 
+  private wasLoadingMore = false;
+
+  constructor() {
+    effect(() => {
+      const isLoadingMore = this.taskStore.isLoadingMore();
+      if (isLoadingMore === this.wasLoadingMore) return;
+
+      this.wasLoadingMore = isLoadingMore;
+      if (isLoadingMore) {
+        this.loadingBarService.show();
+      } else {
+        this.loadingBarService.hide();
+      }
+    });
+  }
+
   ngOnInit(): void {
     const view = this.route.snapshot.data['view'] as NavView;
     this.taskStore.setView(view);
 
-    this.loadingBarService.show();
     this.taskStore.loadTasks(view).subscribe({
-      next: () => {
-        this.loadingBarService.hide();
-      },
+      next: () => {},
       error: () => {
-        this.loadingBarService.hide();
         //todo handle error
       },
     });
@@ -46,6 +58,21 @@ export class TaskListPageComponent implements OnInit {
 
   protected deleteTask(taskId: number): void {
     this.taskStore.deleteTask(taskId).subscribe({
+      error: () => {
+        //todo handle error
+      },
+    });
+  }
+
+  protected onScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    const scrollThreshold = 200;
+    const reachedBottom =
+      target.scrollTop + target.clientHeight >= target.scrollHeight - scrollThreshold;
+
+    if (!reachedBottom) return;
+
+    this.taskStore.loadMore().subscribe({
       error: () => {
         //todo handle error
       },

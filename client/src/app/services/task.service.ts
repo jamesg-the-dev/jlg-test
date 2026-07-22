@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import type { PagedResult } from '../models/http-models/paged-result';
@@ -18,8 +18,9 @@ export class TaskService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/api/todos`;
 
-  getAll(): Observable<PagedResult<Task>> {
-    return this.http.get<PagedResult<TodoResponse>>(this.base).pipe(
+  getAll(page = 1, pageSize = 10): Observable<PagedResult<Task>> {
+    const params = new HttpParams().set('page', page).set('pageSize', pageSize);
+    return this.http.get<PagedResult<TodoResponse>>(this.base, { params }).pipe(
       map((result) => {
         return {
           ...result,
@@ -29,9 +30,10 @@ export class TaskService {
     );
   }
 
-  getCompleted(): Observable<PagedResult<Task>> {
+  getCompleted(page = 1, pageSize = 10): Observable<PagedResult<Task>> {
     const url = `${this.base}/completed`;
-    return this.http.get<PagedResult<TodoResponse>>(url).pipe(
+    const params = new HttpParams().set('page', page).set('pageSize', pageSize);
+    return this.http.get<PagedResult<TodoResponse>>(url, { params }).pipe(
       map((result) => {
         return {
           ...result,

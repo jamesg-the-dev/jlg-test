@@ -1,6 +1,6 @@
 @let tasks = taskStore.tasks();
 
-<section class="flex flex-col flex-1 min-w-0 overflow-y-auto transition-all h-full">
+<section class="flex flex-col flex-1 min-w-0 overflow-y-auto transition-all h-full" (scroll)="onScroll($event)">
   <header class="px-5 md:px-8 pt-7 pb-5">
     <div class="max-w-2xl">
       <div>

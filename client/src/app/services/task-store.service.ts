@@ -1,14 +1,9 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { NavView, Task, TaskFormData, TaskSection } from '../models/task.model';
+import { NavView, Task, TaskFormData } from '../models/task.model';
 import { VIEW_LABELS } from '../constants/global.constant';
 import { Dialog } from '@angular/cdk/dialog';
-import {
-  TaskFormDialogComponent,
-  TaskFormDialogData,
-  TaskFormDialogResult,
-} from '../components/task-form-dialog/task-form-dialog.component';
 import { TaskService } from './task.service';
-import { delay, Observable, tap } from 'rxjs';
+import { catchError, delay, finalize, map, Observable, of, tap, throwError } from 'rxjs';
 import {
   TaskDetailDialogComponent,
   TaskDetailDialogData,
@@ -31,6 +26,7 @@ export class TaskStore {
   readonly viewLabel = computed(() => VIEW_LABELS[this.view()]);
 
   readonly paginationData = signal<PagedData<Task>>(PagedData.empty<Task>());
+  readonly isLoadingMore = signal<boolean>(false);
 
   readonly taskCounts = signal<Record<NavView, number>>({
     all: 0,
@@ -42,15 +38,44 @@ export class TaskStore {
   );
 
   loadTasks(view: NavView) {
-    const request$ =
-      view === 'completed' ? this.taskService.getCompleted() : this.taskService.getAll();
-
-    return request$.pipe(
-      delay(1000), //add artificial delay to simulate loading state
+    this.isLoadingMore.set(true);
+    return this.fetchPage(view, 1).pipe(
+      catchError((error) => {
+        this.isLoadingMore.set(false);
+        return throwError(() => error);
+      }),
       tap((response) => {
         this.paginationData.set(new PagedData(response));
         this.tasks.set(response.items);
+        this.isLoadingMore.set(false);
       }),
+    );
+  }
+
+  loadMore(): Observable<void> {
+    const pagination = this.paginationData();
+    if (!pagination.hasNextPage || this.isLoadingMore()) {
+      return of(undefined);
+    }
+
+    this.isLoadingMore.set(true);
+    const nextPage = pagination.page + 1;
+
+    return this.fetchPage(this.view(), nextPage).pipe(
+      tap((response) => {
+        this.paginationData.set(new PagedData(response));
+        this.tasks.update((tasks) => [...tasks, ...response.items]);
+      }),
+      map(() => undefined),
+      finalize(() => this.isLoadingMore.set(false)),
+    );
+  }
+
+  private fetchPage(view: NavView, page: number) {
+    const requestObs$ =
+      view === 'completed' ? this.taskService.getCompleted(page) : this.taskService.getAll(page);
+    return requestObs$.pipe(
+      delay(1000), //add artificial delay to simulate loading state
     );
   }
 

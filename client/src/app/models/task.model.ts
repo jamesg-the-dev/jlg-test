@@ -21,8 +21,3 @@ export interface TaskFormData {
   priority: Priority | null;
   category: Category;
 }
-
-export interface TaskSection {
-  label: string;
-  items: Task[];
-}
