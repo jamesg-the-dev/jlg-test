@@ -3,11 +3,12 @@ import { Component, computed, input, output } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { formatDate, getCategoryColor, getPriorityConfigObj } from '../../utilities/task.util';
 import { CheckTaskButtonComponent } from '../check-task-button/check-task-button.component';
+import { TooltipDirective } from '../../directives/tooltip.directive';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CheckTaskButtonComponent],
+  imports: [CheckTaskButtonComponent, TooltipDirective],
   templateUrl: './task-card.component.html',
   host: {
     class: 'block',
