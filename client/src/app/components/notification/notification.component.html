@@ -1,0 +1,18 @@
+<div class="text-lg" [class]="icon[item().type].color">
+  <span class="material-symbol symbol-filled" aria-hidden="true">
+    {{ icon[item().type].icon }}
+  </span>
+</div>
+
+<div class="flex-1 min-w-0">
+  <p class="font-medium leading-5 mb-1 text-sm">{{ item().title }}</p>
+  <p class="text-xs text-muted-foreground">{{ item().message }}</p>
+</div>
+
+<button type="button" class="material-symbol symbol-filled text-base hover:bg-muted" (click)="onClose()">
+  close
+</button>
+
+@if (item().duration > 0) {
+  <div class="notification__progress" [style.animation-duration.ms]="item().duration"></div>
+}

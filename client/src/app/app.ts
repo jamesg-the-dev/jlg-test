@@ -8,6 +8,7 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
 import { USER } from './constants/global.constant';
 import { TaskEmptyStateComponent } from './components/task-empty-state/task-empty-state.component';
 import { LoadingBarComponent } from './components/loading-bar/loading-bar.component';
+import { NotificationStackComponent } from './components/notification-stack/notification-stack.component';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { LoadingBarComponent } from './components/loading-bar/loading-bar.compon
     TaskCardComponent,
     TaskEmptyStateComponent,
     LoadingBarComponent,
+    NotificationStackComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
