@@ -10,11 +10,12 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/internal/operators/map';
 import { USER } from './constants/global.constant';
+import { TaskEmptyStateComponent } from "./components/task-empty-state/task-empty-state.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BottomTabBarComponent, SidebarComponent, TaskCardComponent],
+  imports: [BottomTabBarComponent, SidebarComponent, TaskCardComponent, TaskEmptyStateComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

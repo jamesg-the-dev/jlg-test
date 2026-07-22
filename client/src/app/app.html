@@ -21,17 +21,7 @@
 
       <div class="px-5 md:px-8 pb-28 md:pb-10 max-w-2xl space-y-6">
         @if (taskStore.visibleTasks().length === 0) {
-          <section class="rounded-3xl border border-white/65 bg-white/50 p-6 shadow-card">
-            <p
-              class="mb-6 text-xs font-bold uppercase tracking-tight leading-1.5 text-muted-foreground"
-            >
-              All clear
-            </p>
-            <h2 class="mb-2 text-2xl font-bold leading-1.5">
-              Nothing to show in {{ taskStore.viewLabel().toLowerCase() }}
-            </h2>
-            <p class="m-0 leading-7 text-muted-foreground">{{ taskStore.emptyMessage() }}</p>
-          </section>
+          <app-task-empty-state />
         } @else {
           @for (group of taskStore.groupedTasks(); track group.label) {
             <section>
