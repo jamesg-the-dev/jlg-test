@@ -1,0 +1,56 @@
+import { Component, computed, inject } from '@angular/core';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+
+import { Task } from '../../models/task.model';
+import { formatDate, getPriorityConfigObj } from '../../utilities/task.util';
+import { CheckTaskButtonComponent } from '../check-task-button/check-task-button.component';
+import {
+  CATEGORY_COLORS,
+  PriorityConfigObj,
+} from '../../constants/global.constant';
+
+export interface TaskDetailDialogData {
+  task: Task | null;
+  onCompleted: (taskId: number) => void;
+  onDelete: (taskId: number) => void;
+}
+
+@Component({
+  selector: 'app-task-detail-dialog',
+  standalone: true,
+  imports: [CheckTaskButtonComponent],
+  templateUrl: './task-detail-dialog.component.html',
+  host: {
+    class: 'flex flex-col gap-3 p-6 h-full',
+  },
+})
+export class TaskDetailDialogComponent {
+  protected readonly data = inject<TaskDetailDialogData>(DIALOG_DATA);
+  protected readonly dialogRef = inject(DialogRef);
+
+  protected task = computed(() => this.data.task);
+
+  protected readonly priority = computed<PriorityConfigObj | undefined>(() => {
+    const task = this.task();
+    return task?.priority ? getPriorityConfigObj(task.priority) : undefined;
+  });
+
+  protected readonly categoryColor = computed<string | undefined>(() => {
+    const task = this.task();
+    return task?.category ? CATEGORY_COLORS[task.category] : undefined;
+  });
+
+  protected readonly dueDate = computed(() => {
+    const task = this.task();
+    return task ? formatDate(task.dueDate) : '';
+  });
+
+  protected readonly formattedDueDate = computed(() => {
+    const task = this.task();
+    return task ? formatDate(task.dueDate) : '';
+  });
+
+  protected close(): void {
+    this.dialogRef.close();
+  }
+}

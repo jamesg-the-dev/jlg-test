@@ -1,0 +1,61 @@
+@if (task(); as activeTask) {
+  <header class="flex items-start justify-between gap-4">
+    <div class="flex gap-2 items-center">
+      <app-check-task-button
+        [done]="activeTask.done"
+        (completed)="data.onCompleted(activeTask.id)"
+      />
+      <h2
+        class="text-xl font-bold leading-tight"
+        [class]="activeTask.done ? 'line-through text-muted-foreground' : 'text-foreground'"
+      >
+        {{ activeTask.title }}
+      </h2>
+    </div>
+    <button
+      type="button"
+      class="p-1.5 rounded-full hover:bg-muted transition-colors flex items-center justify-center"
+      aria-label="Close task form"
+      (click)="dialogRef.close()"
+    >
+      <span class="material-symbol symbol-filled" aria-hidden="true">close</span>
+    </button>
+  </header>
+
+  <section class="flex flex-col gap-2 mb-5">
+    <div class="mt-4 flex flex-wrap items-center gap-2">
+      @if (priority(); as priorityConfig) {
+        <span
+          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+          [style.color]="priorityConfig.color"
+          [style.background]="priorityConfig.background"
+        >
+          <span class="material-symbol symbol-filled text-xs" aria-hidden="true">flag</span>
+          {{ priorityConfig.label }}
+        </span>
+      }
+
+      @if (activeTask.category) {
+        <span
+          class="inline-flex items-center gap-1.5 text-xs font-medium"
+          [style.color]="categoryColor()"
+        >
+          <span class="h-2 w-2 rounded-full" [style.background]="categoryColor()"></span>
+          {{ activeTask.category }}
+        </span>
+      }
+    </div>
+  </section>
+
+  @if (activeTask.dueDate) {
+    <section>
+      <span class="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
+        <span class="material-symbol symbol-filled" aria-hidden="true">calendar_today</span>
+
+        <span>
+          {{ formattedDueDate() }}
+        </span>
+      </span>
+    </section>
+  }
+}

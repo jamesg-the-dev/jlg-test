@@ -22,7 +22,7 @@ public class CreateTodoRequest
     /// <summary>
     /// The priority of the TODO item. Optional.
     /// </summary>
-    /// <example>0</example>
+    /// <example>High</example>
     public TodoPriority? Priority { get; set; } = null!;
 
     /// <summary>

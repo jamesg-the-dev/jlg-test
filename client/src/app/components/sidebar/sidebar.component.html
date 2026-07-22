@@ -1,0 +1,68 @@
+<aside
+  class="hidden w-70 min-w-70 flex-col border-r border-sidebar-border bg-sidebar min-[960px]:flex h-full"
+>
+  <div class="px-7 pt-8 pb-2">
+    <div class="flex items-center gap-2.5">
+      <div
+        class="rounded-full bg-accent text-white w-8 h-8 flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <span class="material-symbol symbol-filled text-xl">task_alt</span>
+      </div>
+      <div>
+        <p class="text-lg font-bold tracking-tight text-foreground">{{ appName }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-5 py-5">
+    <button
+      type="button"
+      class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm bg-accent text-white font-semibold transition-all duration-150 active:scale-[0.98]"
+      (click)="newTask.emit()"
+    >
+      <span class="material-symbol symbol-filled text-lg">add</span>
+      New Task
+    </button>
+  </div>
+
+  <nav class="flex-1 px-3 space-y-1" aria-label="Task views">
+    @for (item of navItems; track item.id) {
+      <button
+        type="button"
+        class="w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150"
+        [class]="view() === item.id ? 'bg-accent text-white' : 'hover:bg-white/45'"
+        (click)="viewChange.emit(item.id)"
+      >
+        <span class="flex items-center gap-3 min-w-0">
+          <span class="text-xl flex items-center">
+            <span class="material-symbol symbol-filled shrink-0" aria-hidden="true">{{
+              item.icon
+            }}</span>
+          </span>
+          <span class="truncate">{{ item.label }}</span>
+        </span>
+        @if (taskCounts()[item.id] > 0) {
+          <span
+            class="text-xs px-2 py-0.5 rounded-full font-semibold"
+            [class]="view() === item.id ? 'bg-white/16 text-white' : 'bg-muted'"
+          >
+            {{ taskCounts()[item.id] }}
+          </span>
+        }
+      </button>
+    }
+  </nav>
+
+  <div class="mx-5 mb-6 mt-4 px-4 py-3 rounded-xl flex items-center gap-3 bg-sidebar-accent">
+    <div
+      class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 bg-foreground"
+    >
+      J
+    </div>
+    <div class="min-w-0">
+      <p class="text-sm font-semibold text-foreground truncate">{{ name }}</p>
+      <p class="text-xs text-muted-foreground truncate">{{ email }}</p>
+    </div>
+  </div>
+</aside>

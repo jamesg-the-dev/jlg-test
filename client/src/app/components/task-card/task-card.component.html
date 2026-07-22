@@ -1,0 +1,62 @@
+<div
+  class="group bg-card rounded-2xl px-4 py-4 flex items-start gap-3 cursor-pointer transition-all duration-200 shadow-task-card hover:shadow-task-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+  [class.opacity-60]="task().done"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="'View task: ' + task().title"
+  (click)="selected.emit(task())"
+  (keydown.enter)="selected.emit(task())"
+  (keydown.space)="$event.preventDefault(); selected.emit(task())"
+>
+  <app-check-task-button [done]="task().done" (completed)="onCompleted()" />
+
+  <div class="grid min-w-0 gap-2.5">
+    <p class="text-sm font-medium leading-snug text-foreground" [class.line-through]="task().done">
+      {{ task().title }}
+    </p>
+    <div class="flex flex-wrap items-center gap-2.5">
+      @if (priority(); as priorityConfig) {
+        <span
+          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+          [style.color]="priorityConfig.color"
+          [style.background]="priorityConfig.background"
+        >
+          <span class="material-symbol symbol-filled text-xs" aria-hidden="true">flag</span>
+          {{ priorityConfig.label }}
+        </span>
+      }
+
+      @if (task().category) {
+        <span
+          class="inline-flex items-center gap-1.5 text-xs font-medium"
+          [style.color]="categoryColor()"
+        >
+          <span class="h-2 w-2 rounded-full" [style.background]="categoryColor()"></span>
+          {{ task().category }}
+        </span>
+      }
+
+      @if (task().dueDate) {
+        <span class="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
+          <span class="material-symbol symbol-filled text-muted-foreground" aria-hidden="true"
+            >schedule</span
+          >
+
+          <span>
+            {{ formattedDueDate() }}
+          </span>
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="ml-auto flex items-start">
+    <button
+      type="button"
+      class="p-1.5 rounded-lg hover:bg-red-50 transition-colors hover:text-destructive flex items-center justify-center"
+      (click)="onDelete($event)"
+    >
+      <span class="material-symbol symbol-filled text-base" aria-hidden="true">delete</span>
+    </button>
+  </div>
+</div>

@@ -66,10 +66,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -125,5 +121,17 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+  }
+
+  button,
+  input,
+  textarea,
+  select,
+  a {
+    @apply border-border;
+  }
+
+  :is(button, input, textarea, select, a):focus-visible {
+    @apply outline-ring/50;
   }
 }

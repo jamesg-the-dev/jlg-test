@@ -1,12 +1,41 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
+
+import { Task } from './models/task.model';
+import { TaskStore } from './services/task-store.service';
+import { BottomTabBarComponent } from './components/bottom-tab-bar.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { TaskCardComponent } from './components/task-card/task-card.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/internal/operators/map';
+import { USER } from './constants/global.constant';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [BottomTabBarComponent, SidebarComponent, TaskCardComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('client');
+export class App implements OnInit {
+  private readonly dialog = inject(Dialog);
+  private breakpointObserver = inject(BreakpointObserver);
+
+  protected readonly taskStore = inject(TaskStore);
+
+  readonly isMobile = toSignal(
+    this.breakpointObserver.observe(Breakpoints.Handset).pipe(map((r) => r.matches)),
+    { initialValue: false },
+  );
+
+  readonly firstName = USER.firstName;
+
+  protected openTaskDetailDialog(task: Task): void {
+    this.taskStore.openTaskDetailDialog(task);
+  }
+
+  ngOnInit(): void {
+    this.taskStore.loadTasks();
+  }
 }
