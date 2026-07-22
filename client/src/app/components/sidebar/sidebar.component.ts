@@ -56,6 +56,7 @@ export class SidebarComponent implements OnInit {
 
   protected openNewTask(): void {
     this.dialog.open<TaskFormDialogResult, TaskFormDialogData>(TaskFormDialogComponent, {
+      data: { taskData: null },
       maxWidth: '28rem',
       maxHeight: '90vh',
       panelClass: ['bg-white', 'rounded-lg'],

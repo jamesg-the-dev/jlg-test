@@ -5,7 +5,7 @@ import { Category, Priority, TaskFormData } from '../../models/task.model';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { CATEGORIES, PRIORITY_CONFIG } from '../../constants/global.constant';
-import { TaskStore } from '../../services/task-store.service';
+import { TaskService } from '../../services/task.service';
 import { firstValueFrom } from 'rxjs';
 import { TooltipDirective } from '../../directives/tooltip.directive';
 import { NotificationService } from '../../services/notification.service';
@@ -27,7 +27,7 @@ export interface TaskFormDialogResult {
 export class TaskFormDialogComponent {
   readonly dialogRef = inject(DialogRef<TaskFormDialogResult>);
   readonly dialogData = inject(DIALOG_DATA) as TaskFormDialogData;
-  readonly taskStore = inject(TaskStore);
+  readonly taskService = inject(TaskService);
   readonly notificationService = inject(NotificationService);
 
   protected readonly categories = CATEGORIES;
@@ -65,7 +65,7 @@ export class TaskFormDialogComponent {
       return;
     }
 
-    await firstValueFrom(this.taskStore.saveTask(taskForm.value()))
+    await firstValueFrom(this.taskService.create(taskForm.value()))
       .then((createdTask) => {
         this.dialogRef.close({ taskData: createdTask });
       })
