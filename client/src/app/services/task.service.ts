@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import type { PagedResult } from '../models/http-models/paged-result';
 
 import { environment } from '../../environments/environment';
 import { Task, TaskFormData } from '../models/task.model';
@@ -13,10 +14,15 @@ export class TaskService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/api/todos`;
 
-  getAll(): Observable<Task[]> {
-    return this.http
-      .get<TodoResponse[]>(this.base)
-      .pipe(map((todos) => todos.map(mapTodoResponseToTask)));
+  getAll(): Observable<PagedResult<Task>> {
+    return this.http.get<PagedResult<TodoResponse>>(this.base).pipe(
+      map((result) => {
+        return {
+          ...result,
+          items: result.items.map(mapTodoResponseToTask),
+        };
+      }),
+    );
   }
 
   create(data: TaskFormData): Observable<Task> {

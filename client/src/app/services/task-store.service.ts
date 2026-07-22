@@ -16,6 +16,7 @@ import {
 } from '../components/task-detail-dialog/task-detail-dialog.component';
 import { GlobalPositionStrategy } from '@angular/cdk/overlay';
 import { NotificationService } from './notification.service';
+import { PagedData } from '../models/http-models/paged-result';
 
 @Injectable({ providedIn: 'root' })
 export class TaskStore {
@@ -32,6 +33,8 @@ export class TaskStore {
   readonly emptyMessage = computed(() => EMPTY_MESSAGES[this.view()]);
 
   private readonly completedTasks = computed(() => this.tasks().filter((task) => task.done));
+
+  readonly paginationData = signal<PagedData<Task>>(PagedData.empty<Task>());
 
   readonly visibleTasks = computed(() => {
     switch (this.view()) {
@@ -60,7 +63,10 @@ export class TaskStore {
   loadTasks() {
     return this.taskService.getAll().pipe(
       delay(1000), //add artificial delay to simulate loading state
-      tap((ts) => this.tasks.set(ts)),
+      tap((response) => {
+        this.paginationData.set(new PagedData(response));
+        this.tasks.set(response.items);
+      }),
     );
   }
 

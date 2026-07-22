@@ -10,12 +10,19 @@ public class TodoService(TodoDbContext dbContext) : ITodoService
 {
     private readonly TodoDbContext _dbContext = dbContext;
 
-    public async Task<IReadOnlyList<TodoResponse>> GetAllAsync(
+    public async Task<PagedResult<TodoResponse>> GetAllAsync(
+        int page,
+        int pageSize,
         CancellationToken cancellationToken = default
     )
     {
-        return await _dbContext
-            .TodoItems.OrderBy(t => t.Id)
+        var query = _dbContext.TodoItems.AsNoTracking().OrderBy(t => t.Id);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(t => new TodoResponse(
                 t.Id,
                 t.Title,
@@ -26,6 +33,8 @@ public class TodoService(TodoDbContext dbContext) : ITodoService
                 t.CreatedAtUtc
             ))
             .ToListAsync(cancellationToken);
+
+        return new PagedResult<TodoResponse>(items, totalCount, page, pageSize);
     }
 
     public async Task<TodoResponse> CreateAsync(

@@ -14,13 +14,17 @@ public class TodoController(ITodoService todoService) : ControllerBase
     /// Gets all TODO items.
     /// </summary>
     /// <param name="cancellationToken"></param>
+    /// <param name="page"></param>
+    /// <param name="pageSize"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<TodoResponse>>> GetAll(
-        CancellationToken cancellationToken
+    public async Task<ActionResult<PagedResult<TodoResponse>>> GetAll(
+        int page = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default
     )
     {
-        var todos = await _todoService.GetAllAsync(cancellationToken);
+        var todos = await _todoService.GetAllAsync(page, pageSize, cancellationToken);
         return Ok(todos);
     }
 

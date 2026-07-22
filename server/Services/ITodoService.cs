@@ -4,7 +4,11 @@ namespace server.Services;
 
 public interface ITodoService
 {
-    Task<IReadOnlyList<TodoResponse>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<PagedResult<TodoResponse>> GetAllAsync(
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken = default
+    );
 
     Task<TodoResponse> CreateAsync(
         CreateTodoRequest request,
