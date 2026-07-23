@@ -22,4 +22,8 @@
     <EmbeddedResource Remove="TodoApi.Tests/**/*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Data/Seeds/TodoSeeds.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

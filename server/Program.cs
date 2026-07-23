@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Data.Seeds;
 using server.ExceptionHandlers;
 using server.Services;
 
@@ -51,6 +52,7 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
     dbContext.Database.EnsureCreated();
+    await TodoSeeder.SeedAsync(dbContext);
 }
 
 app.UseExceptionHandler();
