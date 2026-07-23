@@ -68,6 +68,7 @@ export class TaskFormDialogComponent {
     await firstValueFrom(this.taskService.create(taskForm.value()))
       .then((createdTask) => {
         this.dialogRef.close({ taskData: createdTask });
+        this.notificationService.success('Success', 'Task created successfully.');
       })
       .catch(() => {
         let message = 'Failed to save task. Please try again.';
