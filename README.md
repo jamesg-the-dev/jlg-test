@@ -15,6 +15,7 @@ npm start
 Navigate to http://localhost:4200
 
 ## Things I would do if given more time
+- I would add navigation to movile version
 - I would have liked to add validation in the task form on the client side
 - right now TodoService.ValidateAndNormalizeTitle hand-rolls validation and throws a custom exception. I'd move to FluentValidation or DataAnnotations on the DTOs.
 - GetAllAsync and GetCompletedAsync in TodoService.cs are basically identical (paging, projection). I'd combined it into one method with a filter query param.
