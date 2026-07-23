@@ -9,8 +9,12 @@
   <p class="text-xs text-muted-foreground">{{ item().message }}</p>
 </div>
 
-<button type="button" class="material-symbol symbol-filled text-base hover:bg-muted" (click)="onClose()">
-  close
+<button
+  type="button"
+  class="p-1.5 rounded-full hover:bg-muted transition-colors flex items-center justify-center"
+  (click)="onClose()"
+>
+  <span class="material-symbol symbol-filled" aria-hidden="true">close</span>
 </button>
 
 @if (item().duration > 0) {
